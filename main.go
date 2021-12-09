@@ -18,6 +18,7 @@ func main() {
 
 	// sign on the hash
 	signature := encrypt.GenerateSignature(prvkey, msgHashSum)
+	//fmt.Println(len(signature))
 
 	// verify signature
 	encrypt.CheckSignature(signature, pubkey, msgHashSum)
@@ -25,4 +26,23 @@ func main() {
 	// decrypt
 	decrypted := encrypt.DecryptionMessage(prvkey, encryptedBytes)
 	fmt.Println(decrypted)
+
+	// Playing with message
+	m := &MetadataServer{
+		CodigoServidor: "000001",
+		Signature:      signature,
+	}
+	res, err := m.ToJson()
+	if err != nil {
+		fmt.Println("Problems")
+	}
+	fmt.Println(string(res))
+	maembo := string(m.Signature)
+	//fmt.Printf("Payload mambeado %v\n", string(m.Signature))
+	mamberto := []byte(maembo)
+	fmt.Printf("Payload mambeado y masajeado %v\n", mamberto)
+
+	fmt.Println("Re-doing the verification")
+	encrypt.CheckSignature(signature, pubkey, msgHashSum)
+
 }
